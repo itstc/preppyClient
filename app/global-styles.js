@@ -2,6 +2,7 @@ import { injectGlobal } from 'styled-components';
 
 /* eslint no-unused-expressions: 0 */
 injectGlobal`
+
   html,
   body {
     height: 100%;
@@ -13,18 +14,13 @@ injectGlobal`
   }
 
   body.fontLoaded {
-    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  }
-
-  #app {
-    background-color: #fafafa;
-    min-height: 100%;
-    min-width: 100%;
+    font-family: 'CircularStd', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
 
   p,
   label {
     font-family: Georgia, Times, 'Times New Roman', serif;
+    color: #D0D2DE;
     line-height: 1.5em;
   }
 `;

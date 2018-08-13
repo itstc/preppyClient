@@ -1,16 +1,16 @@
 {
-  "name": "react-boilerplate",
+  "name": "preppyClient",
   "version": "3.6.0",
   "description": "A highly scalable, offline-first foundation with the best DX and a focus on performance and best practices",
   "repository": {
     "type": "git",
-    "url": "git://github.com/react-boilerplate/react-boilerplate.git"
+    "url": "git://github.com/itstc/preppyClient.git"
   },
   "engines": {
     "npm": ">=5",
     "node": ">=8"
   },
-  "author": "Max Stoiber",
+  "author": "Thomas Chu",
   "license": "MIT",
   "scripts": {
     "analyze:clean": "rimraf stats.json",
@@ -36,8 +36,8 @@
     "generate": "plop --plopfile internals/generators/index.js",
     "lint": "npm run lint:js && npm run lint:css",
     "lint:css": "stylelint './app/**/*.js'",
-    "lint:eslint": "eslint --ignore-path .gitignore --ignore-pattern internals/scripts",
-    "lint:eslint:fix": "eslint --ignore-path .gitignore --ignore-pattern internals/scripts --fix",
+    "lint:eslint": "eslint --ignore-path .gitignore --ignore-pattern internals/scripts || true",
+    "lint:eslint:fix": "eslint --ignore-path .gitignore --ignore-pattern internals/scripts --fix || true",
     "lint:js": "npm run lint:eslint -- . ",
     "lint:staged": "lint-staged",
     "pretest": "npm run test:clean && npm run lint",
@@ -58,6 +58,11 @@
     ]
   },
   "pre-commit": "lint:staged",
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:8000"
+    }
+  },
   "babel": {
     "plugins": [
       "styled-components"
@@ -146,12 +151,14 @@
   "dependencies": {
     "babel-polyfill": "6.26.0",
     "chalk": "^2.4.1",
+    "circular-std": "^1.0.0",
     "compression": "1.7.2",
     "cross-env": "5.2.0",
     "express": "4.16.3",
     "fontfaceobserver": "2.0.13",
     "history": "4.7.2",
     "hoist-non-react-statics": "2.5.5",
+    "http-proxy-middleware": "^0.18.0",
     "immutable": "3.8.2",
     "intl": "1.2.5",
     "invariant": "2.2.4",
@@ -200,7 +207,7 @@
     "enzyme": "3.3.0",
     "enzyme-adapter-react-16": "1.1.1",
     "enzyme-to-json": "3.3.4",
-    "eslint": "4.19.1",
+    "eslint": "^4.19.1",
     "eslint-config-airbnb": "16.1.0",
     "eslint-config-airbnb-base": "12.1.0",
     "eslint-config-prettier": "2.9.0",

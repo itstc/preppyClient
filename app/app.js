@@ -13,6 +13,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
+import FontFaceObserver from 'fontfaceobserver';
 import createHistory from 'history/createBrowserHistory';
 import 'sanitize.css/sanitize.css';
 
@@ -35,6 +36,13 @@ import { translationMessages } from './i18n';
 
 // Import CSS reset and Global Styles
 import './global-styles';
+
+// Font Observer
+const cstdObserver = new FontFaceObserver('CircularStd', {});
+
+cstdObserver.load().then(() => {
+  document.body.classList.add('fontLoaded');
+});
 
 // Create redux store with history
 const initialState = {};

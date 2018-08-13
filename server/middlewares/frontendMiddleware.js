@@ -10,6 +10,11 @@ module.exports = (app, options) => {
     const addProdMiddlewares = require('./addProdMiddlewares');
     addProdMiddlewares(app, options);
   } else {
+    // use proxy on port 8000
+    const proxy = require('http-proxy-middleware');
+    const apiProxy = proxy('/api', { target: 'http://localhost:8000' });
+    app.use('/api', apiProxy);
+
     const webpackConfig = require('../../internals/webpack/webpack.dev.babel');
     const addDevMiddlewares = require('./addDevMiddlewares');
     addDevMiddlewares(app, webpackConfig);
