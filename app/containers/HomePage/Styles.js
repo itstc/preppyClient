@@ -2,17 +2,26 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
 `;
 
 const Home = styled.div`
   padding: 0 15px;
-`;
 
-const List = styled.div`
   width: 50vw;
-  display: flex;
-  flex-flow: row wrap;
+
+  @media (max-width: 700px) {
+    width: 100%;
+  }
 `;
 
-export { Wrapper, Home, List };
+const TextRow = styled.p`
+  flex-grow: 1;
+  width: 100%;
+
+  text-align:right;
+  align-self: center;
+
+`
+
+export { Wrapper, Home, List, TextRow };

@@ -1,38 +1,59 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import {Link} from 'react-router-dom';
+
 const Wrapper = styled.div`
-  margin-right: 10px;
-  margin-bottom: 10px;
-  width: 200px;
+  width: 31%;
   height: 400px;
 
   display: flex;
-  flex-direction: column;
+  flex-flow: row wrap;
   justify-content: center;
 
   border: 1px solid #eee;
   border-radius: 5px;
+
+  margin: 1%;
+
+  @media (max-width: 700px) {
+    margin-left: 0;
+    width: 98%;
+  }
 `;
 
 const Heading = styled.h3`
   padding: 10px;
   font-weight: 300;
-  font-size: 1.25em;
+  font-size: 1.2em;
 `;
 
 const ImageContent = styled.div`
-  background: url(${props => props.img});
-  width: 100%;
-  height: 300px;
+  background-image: url(${props => props.img});
+  background-repeat: no-repeat;
   background-size: cover;
+  background-position: center;
+
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+
+  border-radius: 5px 5px 0 0;
 `;
 
-const Card = props => (
+const Card = props => {
+  // if we have prop 'to' we create a link component else fragment
+  let IsLink = props.to ? Link : styled.div``
+  
+  return (
   <Wrapper>
-    <ImageContent img={props.img} />
+    <IsLink to={props.to || ''}>
+    <ImageContent img={props.img}>
+    </ImageContent>
     <Heading>{props.title}</Heading>
+    </IsLink>
   </Wrapper>
-);
+)
+};
 
 export default Card;

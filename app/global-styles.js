@@ -17,9 +17,13 @@ injectGlobal`
     font-family: 'CircularStd', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
 
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
   p,
   label {
-    font-family: Georgia, Times, 'Times New Roman', serif;
     color: #D0D2DE;
     line-height: 1.5em;
   }

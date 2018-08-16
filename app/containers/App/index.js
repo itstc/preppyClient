@@ -12,18 +12,36 @@
  */
 
 import React from 'react';
+import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
 
 import HomePage from 'containers/HomePage';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
+import SideBar from '../../components/Sidebar';
+import RecipesPage from '../RecipesPage';
+import RecipeItemPage from '../RecipeItemPage';
+
+// For Sidebar and page
+const PageWrapper = styled.div`
+  margin-left: 11rem;
+  @media (max-width: 700px) {
+    margin-left: 0;
+    width: 100%;
+  }
+`
 
 export default function App() {
   return (
     <div>
-      <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route component={NotFoundPage} />
-      </Switch>
+      <SideBar/>
+      <PageWrapper>
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          <Route exact path="/recipes" component={RecipesPage} />
+          <Route exact path="/recipes/:id" component={RecipeItemPage} />
+          <Route component={NotFoundPage} />
+        </Switch>
+      </PageWrapper>
     </div>
   );
 }

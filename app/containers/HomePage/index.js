@@ -10,6 +10,7 @@
  */
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -18,24 +19,27 @@ import injectSaga from 'utils/injectSaga';
 import messages from './messages';
 import reducer from './reducer';
 import saga from './saga';
-import { loadRecipes } from '../App/actions';
+import { loadRecipes, clearRecipes } from '../App/actions';
 
-import { Wrapper, Home, List } from './Styles';
+import { Wrapper, Home, TextRow } from './Styles';
+import List from '../../components/List';
 import H2 from '../../components/H2';
-import SideBar from '../../components/Sidebar';
 import Card from '../../components/Card';
+
 /* eslint-disable react/prefer-stateless-function */
 class HomePage extends React.PureComponent {
   componentWillMount() {
-    this.props.getRecipes();
+    this.props.getRecipes(3);
+  }
+
+  componentWillUnmount() {
+    this.props.clearRecipes()
   }
 
   render() {
-    console.log(this.props.home.get('recipes'));
     return (
       <Wrapper>
-        <SideBar />
-        <Home style={{ marginLeft: '11rem' }}>
+        <Home>
           <h1>
             <FormattedMessage {...messages.header} />
           </h1>
@@ -45,11 +49,13 @@ class HomePage extends React.PureComponent {
             {this.props.home.get('recipes')
               ? this.props.home
                   .get('recipes')
+                  .slice(0, 3)
                   .map((item, i) => (
                     <Card title={item.name} img={item.img} key={i} />
                   ))
               : null}
           </List>
+          <TextRow><Link to="/recipes">View More...</Link></TextRow>
         </Home>
       </Wrapper>
     );
@@ -61,7 +67,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getRecipes: () => dispatch(loadRecipes()),
+  getRecipes: (limit) => dispatch(loadRecipes(limit)),
+  clearRecipes: () => dispatch(clearRecipes()),
 });
 
 const withConnect = connect(

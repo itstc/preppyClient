@@ -1,14 +1,15 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, takeEvery, take } from 'redux-saga/effects';
 import request from '../../utils/request';
 
 import { SERVER_URL } from '../config';
-import { LOAD_RECIPES } from '../App/constants';
 
 import { recipesLoaded, recipesLoadingError } from '../App/actions';
+import { LOAD_RECIPES } from '../App/constants';
 
-function* getRecipes() {
-  const requestURL = `${SERVER_URL}/api/recipes`;
+function* getRecipes(action) {
+  const requestURL = `${SERVER_URL}/api/recipes?limit=${action.limit}&page=${action.page}`;
 
+  // Call for recipes while catching for errors
   try {
     const recipes = yield call(request, requestURL);
     yield put(recipesLoaded(recipes));
@@ -18,5 +19,5 @@ function* getRecipes() {
 }
 
 export default function* recipes() {
-  yield takeLatest(LOAD_RECIPES, getRecipes);
+  yield takeEvery(LOAD_RECIPES, getRecipes);
 }

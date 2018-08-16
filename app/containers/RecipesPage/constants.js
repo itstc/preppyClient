@@ -1,0 +1,1 @@
+export const INCREMENT_PAGE = 'preppy/RecipesPage/INCREMENT_PAGE';
