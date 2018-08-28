@@ -27,6 +27,7 @@ export const ImageContent = styled.div`
   @media (max-width: 900px) {
     width: 100%;
     margin-left: 0;
+    height: 300px;
   }
 `
 
@@ -61,10 +62,12 @@ export const Body = styled.div`
 
 export const Ingredients = styled.ul`
   width: 30%;
-  margin-right: 3%;
+  padding-right: 3%;
+  background-color: #B5C3E7;
   @media (max-width: 700px) {
     width: 100%;
     margin-right: 0;
+    background-color: inherit;
   }
 `
 
@@ -82,4 +85,18 @@ export const ListItem = styled.li`
 export const Bold = styled.span`
   font-weight: 700;
   text-align:center;
+`
+
+export const ServingCard = styled.div`
+  align-self: center;
+  width: 20%;
+  height: 75px;
+  background-color: #F7B538;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 2em;
+  color: white;
 `

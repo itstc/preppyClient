@@ -1,6 +1,6 @@
 import { fromJS } from 'immutable';
 
-import { LOAD_RECIPES_SUCCESS, CLEAR_RECIPES } from '../App/constants';
+import { LOAD_RECIPES_SUCCESS, CLEAR_RECIPES } from '../../App/constants';
 import { INCREMENT_PAGE } from './constants';
 
 export const initialState = fromJS({
@@ -15,8 +15,7 @@ function recipesReducer(state = initialState, action) {
     case CLEAR_RECIPES:
       return initialState;
     case INCREMENT_PAGE:
-      let pagenum = state.get('page') + action.amount;
-      return state.set('page', pagenum);
+      return state.set('page', state.get('page') + action.amount);
     default: return state;
   }
 }

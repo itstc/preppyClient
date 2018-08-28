@@ -1,4 +1,4 @@
-import { call, put, takeEvery, take } from 'redux-saga/effects';
+import { call, put, takeEvery, take, takeLatest } from 'redux-saga/effects';
 import request from '../../utils/request';
 
 import { SERVER_URL } from '../config';

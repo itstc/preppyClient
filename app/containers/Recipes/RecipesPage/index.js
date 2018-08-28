@@ -5,32 +5,40 @@ import { compose } from 'redux';
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
 
-import {loadRecipes, clearRecipes} from '../App/actions';
+import {loadRecipes, clearRecipes} from '../../App/actions';
 import reducer from './reducer';
-import saga from '../HomePage/saga';
+import saga from '../../HomePage/saga';
 
-import Wrapper from '../../components/Wrapper';
-import Card from '../../components/Card';
-import List from '../../components/List';
-import Button from '../../components/Button';
+import Wrapper from '../../../components/Wrapper';
+import Card from '../../../components/Card';
+import List from '../../../components/List';
 import { incrementPage } from './actions';
-
+import {throttle} from 'throttle-debounce';
 
 class RecipesPage extends Component {
 
-  handleViewMore = () => {
-    this.props.incrementPage();
-    this.props.loadRecipes(this.props.recipes.get('page'));
+  handleViewMore = (e) => {
+    // when we scroll all the way to the bottom call for more recipes
+    if(window.scrollY + window.innerHeight >= e.target.body.scrollHeight) {
+      // limit call for recipes
+      (throttle(1000, () => {
+        this.props.incrementPage();
+        this.props.loadRecipes(this.props.recipes.get('page'));
+      }))();
+    }
   }
 
   componentWillMount() {
     // fetch recipes before mount
-    this.props.incrementPage();
+    window.addEventListener('scroll', this.handleViewMore)
+    // scroll to the top
+    window.scrollTo(0,0)
     this.props.loadRecipes(this.props.recipes.get('page'));
   }
 
   componentWillUnmount() {
     // clear recipes list when we leave page
+    window.removeEventListener('scroll', this.handleViewMore)
     this.props.clearRecipes();
   }
 
@@ -46,7 +54,6 @@ class RecipesPage extends Component {
             }): null
           }
         </List>
-        <Button onClick={this.handleViewMore}>View More</Button>
       </Wrapper>
     )
   }
@@ -64,7 +71,7 @@ function mapDispatchToProps(dispatch) {
   return {
     loadRecipes: (page) => dispatch(loadRecipes(20, page)),
     clearRecipes: () => dispatch(clearRecipes()),
-    incrementPage: () => dispatch(incrementPage())
+    incrementPage: () => dispatch(incrementPage(1))
   }
 }
 

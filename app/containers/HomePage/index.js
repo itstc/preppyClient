@@ -49,9 +49,8 @@ class HomePage extends React.PureComponent {
             {this.props.home.get('recipes')
               ? this.props.home
                   .get('recipes')
-                  .slice(0, 3)
                   .map((item, i) => (
-                    <Card title={item.name} img={item.img} key={i} />
+                    <Card to={`/recipes/${item.id}`} title={item.name} img={item.img} key={i} />
                   ))
               : null}
           </List>

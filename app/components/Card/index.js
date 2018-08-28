@@ -25,11 +25,14 @@ const Wrapper = styled.div`
 const Heading = styled.h3`
   padding: 10px;
   font-weight: 300;
-  font-size: 1.2em;
+  font-size: 1.1em;
 `;
 
-const ImageContent = styled.div`
-  background-image: url(${props => props.img});
+const ImageContent = styled.div.attrs({
+  style: ({ backgroundImage }) => ({
+    backgroundImage,
+  })
+})`
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -48,7 +51,7 @@ const Card = props => {
   return (
   <Wrapper>
     <IsLink to={props.to || ''}>
-    <ImageContent img={props.img}>
+    <ImageContent style={{backgroundImage: `url(${props.img || ''})`}}>
     </ImageContent>
     <Heading>{props.title}</Heading>
     </IsLink>

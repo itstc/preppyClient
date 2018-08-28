@@ -18,8 +18,12 @@ import { Switch, Route } from 'react-router-dom';
 import HomePage from 'containers/HomePage';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import SideBar from '../../components/Sidebar';
-import RecipesPage from '../RecipesPage';
-import RecipeItemPage from '../RecipeItemPage';
+import RecipesPage from '../Recipes/RecipesPage';
+import RecipeItemPage from '../Recipes/RecipeItemPage';
+import LoginPage from '../Users/LoginPage';
+import LogoutPage from '../Users/LogoutPage';
+import RegisterPage from '../Users/RegisterPage';
+import UserPage from '../Users/UserPage';
 
 // For Sidebar and page
 const PageWrapper = styled.div`
@@ -30,15 +34,20 @@ const PageWrapper = styled.div`
   }
 `
 
-export default function App() {
+export default function App(props) {
+
   return (
     <div>
-      <SideBar/>
+      <SideBar history={props}/>
       <PageWrapper>
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route exact path="/recipes" component={RecipesPage} />
           <Route exact path="/recipes/:id" component={RecipeItemPage} />
+          <Route exact path="/login" component={LoginPage} />
+          <Route exact path="/logout" component={LogoutPage} />
+          <Route exact path="/register" component={RegisterPage} />
+          <Route exact path="/users/:id" component={UserPage} />
           <Route component={NotFoundPage} />
         </Switch>
       </PageWrapper>

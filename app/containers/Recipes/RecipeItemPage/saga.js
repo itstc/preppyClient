@@ -1,8 +1,8 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
-import request from '../../utils/request';
+import request from '../../../utils/request';
 import { LOAD_RECIPE_ID } from './constants';
 
-import {SERVER_URL} from '../config';
+import {SERVER_URL} from '../../config';
 
 import {recipeByIdLoaded, recipeByIdError} from './actions';
 

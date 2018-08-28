@@ -2,16 +2,21 @@ import React, {Component} from 'react';
 import FontAwesome from 'react-fontawesome';
 import {connect} from 'react-redux';
 import {compose} from 'redux';
-import injectSaga from '../../utils/injectSaga';
-import injectReducer from '../../utils/injectReducer';
+import injectSaga from '../../../utils/injectSaga';
+import injectReducer from '../../../utils/injectReducer';
+
+import './styles.css';
 
 import reducer from './reducer';
 import saga from './saga';
 import {loadRecipeById, clearRecipe} from './actions';
 
-import Wrapper from '../../components/Wrapper';
-import { Header, ImageContent, Description, Heading, Body, Ingredients, Instructions, ListItem, Bold } from './Styles';
-import Button from '../../components/Button';
+import Wrapper from '../../../components/Wrapper';
+import { 
+  Header, ImageContent, Description, Heading,
+  Body, Ingredients, Instructions, ListItem, Bold, ServingCard,
+} from './Styles';
+import Button from '../../../components/Button';
 
 
 class RecipeItemPage extends Component {
@@ -26,10 +31,25 @@ class RecipeItemPage extends Component {
         height: '100%',
         }}><FontAwesome name="play" /></Button>
     </ImageContent>),
+    volumeState: <FontAwesome name='volume-up'/>
   }
 
   toggleVideoState(event) {
     return event.target.paused ? event.target.play(): event.target.pause();
+  }
+
+  toggleVolume = (event) => {
+    let video = this.refs.videoElement;
+    video ? video.muted = !video.muted : null;
+    // display proper icon for volume
+    this.setState({volumeState: video.muted ? <FontAwesome name='volume-off'/>: <FontAwesome name='volume-up'/>})
+  }
+
+  // update videoTime in state
+  updateProgressBar = (event) => {
+    // this is in percentage for width: `${barWidth}%`
+    if(!this.refs.videoBar) return
+    this.refs.videoBar.style.width = `${(100 / event.target.duration) * event.target.currentTime}%`
   }
 
   // render the recipe
@@ -40,7 +60,8 @@ class RecipeItemPage extends Component {
         <Description>
           <Heading>{recipe.name}</Heading>
           <a href={recipe.url} style={{color: '#D0D2DE'}}>Source: {recipe.src}</a>
-          <h3>Servings: {recipe.servings}</h3>
+          <h3>Servings:</h3>
+          <ServingCard>{recipe.servings}</ServingCard>
         </Description>
       </Header>
       <Body>
@@ -59,15 +80,43 @@ class RecipeItemPage extends Component {
   // set state to video tag
   renderVideo = () => {
     this.setState({mediaObject: (recipe) => (
-    <video width="400px" height="400px" autoPlay onClick={this.toggleVideoState}>
+    <div style={{width: '400px', display: 'flex', flexDirection: 'column'}}>
+    <Button style={{
+      alignSelf: 'flex-end',
+      position: 'relative',
+      top: '20px',
+      left: '-5px',
+      color: 'white',
+      backgroundColor: 'transparent',
+      padding: '0',
+      margin: '0',
+      zIndex: '999',
+    }}
+    onClick={this.toggleVolume}
+    >
+      {this.state.volumeState} 
+    </Button>
+
+    <video 
+    ref = "videoElement"
+    autoPlay 
+    onClick={this.toggleVideoState}
+    onTimeUpdate={this.updateProgressBar}>
       <source src={recipe.video} type="video/mp4" />
-    </video>)
+    </video>
+    <span ref="videoBar" 
+    style={{ 
+      height: '5px',
+      backgroundColor: '#B5C3E7',
+    }}/>
+    </div>)
     })
   }
 
   // render items in array as <ListItem>
   renderList(list) {
-    return list ? list.map((item, i) => <ListItem key={i}>{item}</ListItem>): null;
+    // sometime web scrape do doodoo job so cancel out repeated items
+    return list ? Array.from(new Set(list)).map((item, i) => <ListItem key={i}>{item}</ListItem>): null;
   }
 
   // call request for recipe
