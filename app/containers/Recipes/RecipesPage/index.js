@@ -33,6 +33,8 @@ class RecipesPage extends Component {
     window.addEventListener('scroll', this.handleViewMore)
     // scroll to the top
     window.scrollTo(0,0)
+    
+    // load first page of recipes
     this.props.loadRecipes(this.props.recipes.get('page'));
   }
 

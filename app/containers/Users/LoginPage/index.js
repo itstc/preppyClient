@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import injectSaga from '../../../utils/injectSaga';
 import styled from '../../../../node_modules/styled-components';
 import FontAwesome from 'react-fontawesome';
+
+import {loginUser} from './actions';
+import saga from '../saga';
 
 import Button from '../../../components/Button';
 
@@ -44,12 +50,14 @@ const Modal = styled.form`
 
 const InputField = styled.div`
 
+  width: 80%;
+
   display: flex;
   flex-direction: wrap;
 
   justify-content: center;
 
-  margin: 15px 0;
+  margin: 15px auto;
 `
 
 const FormInput = styled.input`
@@ -60,6 +68,7 @@ const FormInput = styled.input`
   color: #777;
 
   font-weight: 300;
+  font-size: 12px;
 
   outline: none;
 
@@ -93,25 +102,42 @@ const ClipArt = styled.div`
   border-radius: 5px;
 `
 
-export default class LoginPage extends Component {
+class LoginPage extends Component {
 
   state = {
     renderState: true,
   }
 
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    })
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault()
+    // dispatch action to login user
+    this.props.loginUser({email: this.state.email, password: this.state.password})
+  }
+
   renderModal = () => (
       <div style={{position: "absolute", left: "0px", top:"0px"}}>
         <BackDrop onClick={this.exitModal}/>
-        <Modal>
+        <Modal onSubmit={this.handleSubmit}>
           Preppy Login
           <ClipArt/>
           <InputField>
             <FormLabel><FontAwesome name="envelope"/></FormLabel>
-            <FormInput name="email" type="email"/>
+            <FormInput name="email" type="email" onChange={this.handleChange}/>
           </InputField>
           <InputField>
             <FormLabel><FontAwesome name="lock"/></FormLabel>
-            <FormInput name="password" type="password"/>
+            <FormInput 
+            pattern="(?=.*[A-Z]).{8,}" 
+            title="Password must contain at least 8 characters and 1 uppercase"
+            name="password" 
+            type="password" 
+            onChange={this.handleChange}/>
           </InputField>
           <InputField>
             <Button>Login</Button>
@@ -123,7 +149,7 @@ export default class LoginPage extends Component {
 
   exitModal = () => {
     // exit the modal when you click on the backdrop
-    this.props.dismiss()
+    this.props.dismiss ? this.props.dismiss(): null;
     this.setState({renderState: false})
   }
 
@@ -132,4 +158,24 @@ export default class LoginPage extends Component {
     return this.state.renderState ?
     this.renderModal(): null;
   }
+
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loginUser: (data) => dispatch(loginUser(data)),
+  }
+}
+
+
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
+
+const withSaga = injectSaga({ key: 'login', saga });
+
+export default compose(
+  withSaga,
+  withConnect,
+)(LoginPage);

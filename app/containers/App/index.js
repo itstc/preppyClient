@@ -11,7 +11,7 @@
  * the linting exception.
  */
 
-import React from 'react';
+import React, {Component} from 'react';
 import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
 
@@ -35,10 +35,9 @@ const PageWrapper = styled.div`
 `
 
 export default function App(props) {
-
   return (
     <div>
-      <SideBar history={props}/>
+      <SideBar {...props}/>
       <PageWrapper>
         <Switch>
           <Route exact path="/" component={HomePage} />

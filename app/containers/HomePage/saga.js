@@ -1,4 +1,4 @@
-import { call, put, takeEvery, take, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import request from '../../utils/request';
 
 import { SERVER_URL } from '../config';
@@ -19,5 +19,5 @@ function* getRecipes(action) {
 }
 
 export default function* recipes() {
-  yield takeEvery(LOAD_RECIPES, getRecipes);
+  yield takeLatest(LOAD_RECIPES, getRecipes);
 }

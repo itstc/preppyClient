@@ -1,7 +1,14 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {compose} from 'redux';
+
 import styled from 'styled-components';
 import FontAwesome from 'react-fontawesome';
 import LoginPage from '../../containers/Users/LoginPage';
+import injectSaga from '../../utils/injectSaga';
+
+import saga from '../../containers/Users/saga';
+import { authUser } from '../../containers/Users/actions';
 
 const Bar = styled.div`
 position: fixed;
@@ -44,6 +51,11 @@ const Item = styled.button`
   font-size: 14px;
 `
 
+const Logo = styled.img`
+  width: 64px;
+  height: 64px;
+`
+
 class SideBar extends Component {
 
   state = {
@@ -51,7 +63,7 @@ class SideBar extends Component {
   }
 
   redirectHome = () => {
-    this.props.history.push('/')
+    this.props.push('/')
   }
 
   // pass to modals to reset the currentModal state
@@ -64,9 +76,15 @@ class SideBar extends Component {
     this.setState({ currentModal: React.createElement(LoginPage, {dismiss: this.dismissModal}) })
   }
 
+  componentDidMount() {
+    this.props.authUser()
+  }
+
   render() {
+    console.log(this.props.auth)
     return <Bar>
       <Heading onClick={this.redirectHome}>Preppy Demo</Heading>
+      {this.props.auth && this.props.auth.get('user') ? this.props.auth.get('user').name: null}
       <ListItems>
         <Item onClick={this.showLogin}>Login</Item>
         <Item onClick={this.showLogin}>Register</Item>
@@ -76,4 +94,17 @@ class SideBar extends Component {
   };
 }
 
-export default SideBar;
+const mapStateToProps = (state) => {
+  return {
+    auth: state.get('auth'),
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    authUser: () => dispatch(authUser()),
+  }
+}
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps)
+export default compose(withConnect)(SideBar);

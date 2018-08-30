@@ -59,7 +59,7 @@ class RecipeItemPage extends Component {
         {this.state.mediaObject(recipe)}
         <Description>
           <Heading>{recipe.name}</Heading>
-          <a href={recipe.url} style={{color: '#D0D2DE'}}>Source: {recipe.src}</a>
+          <a href={recipe.url} target="blank" style={{color: '#D0D2DE'}}>Source: {recipe.src}</a>
           <h3>Servings:</h3>
           <ServingCard>{recipe.servings}</ServingCard>
         </Description>
@@ -124,16 +124,20 @@ class RecipeItemPage extends Component {
     this.props.getRecipe(this.props.match.params.id)
   }
 
+  componentDidUpdate() {
+    // if we receive an error response
+    if(this.props.recipe && this.props.recipe.get('error')) {
+      this.props.history.push('/404')
+    }
+    
+  }
+
   // clear recipe state back to initial state
   componentWillUnmount() {
     this.props.clearRecipe()
   }
 
   render() {
-    // if we receive an error
-    if(this.props.recipe && this.props.recipe.get('error')) {
-      this.props.history.push('/404')
-    }
     // see if we received recipe or not
     let recipe = this.props.recipe;
     return recipe ? this.renderRecipe(recipe.get('recipe')): null

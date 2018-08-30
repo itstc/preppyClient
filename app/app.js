@@ -25,11 +25,13 @@ import LanguageProvider from 'containers/LanguageProvider';
 
 // Load the favicon and the .htaccess file
 /* eslint-disable import/no-unresolved, import/extensions */
+import '!file-loader?name=[name].[ext]&outputPath=images/!./images/preppyweb128.png'
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';
 import 'file-loader?name=[name].[ext]!./.htaccess';
 /* eslint-enable import/no-unresolved, import/extensions */
 
 import configureStore from './configureStore';
+import userSaga from './containers/Users/saga';
 
 // Import i18n messages
 import { translationMessages } from './i18n';
@@ -48,6 +50,9 @@ cstdObserver.load().then(() => {
 const initialState = {};
 const history = createHistory();
 const store = configureStore(initialState, history);
+// run user saga
+store.runSaga(userSaga)
+
 const MOUNT_NODE = document.getElementById('app');
 
 const render = messages => {

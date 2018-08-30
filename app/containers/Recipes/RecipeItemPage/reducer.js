@@ -2,7 +2,8 @@ import { fromJS } from "immutable";
 import * as types from './constants';
 
 const initialState = fromJS({
-  recipe: {}
+  recipe: {},
+  error: null,
 })
 
 export default function recipeItemReducer(state = initialState, action) {
