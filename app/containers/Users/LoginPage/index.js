@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
-import injectSaga from '../../../utils/injectSaga';
 import styled from '../../../../node_modules/styled-components';
 import FontAwesome from 'react-fontawesome';
 
 import {loginUser} from './actions';
-import saga from '../saga';
 
 import Button from '../../../components/Button';
 
@@ -114,10 +111,18 @@ class LoginPage extends Component {
     })
   }
 
+  // handles login form submission
   handleSubmit = (e) => {
     e.preventDefault()
     // dispatch action to login user
     this.props.loginUser({email: this.state.email, password: this.state.password})
+  }
+  
+  // set render state to false if user is logged in
+  componentWillReceiveProps() {
+    if(this.props.auth) {
+      this.setState({renderState: false})
+    }
   }
 
   renderModal = () => (
@@ -161,21 +166,15 @@ class LoginPage extends Component {
 
 }
 
+const mapStateToProps = (state) => ({auth: state.get('auth')})
+
 const mapDispatchToProps = (dispatch) => {
   return {
     loginUser: (data) => dispatch(loginUser(data)),
   }
 }
 
-
-const withConnect = connect(
-  null,
+export default connect(
+  mapStateToProps,
   mapDispatchToProps,
-);
-
-const withSaga = injectSaga({ key: 'login', saga });
-
-export default compose(
-  withSaga,
-  withConnect,
 )(LoginPage);

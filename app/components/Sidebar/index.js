@@ -1,14 +1,12 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {compose} from 'redux';
 
 import styled from 'styled-components';
-import FontAwesome from 'react-fontawesome';
 import LoginPage from '../../containers/Users/LoginPage';
-import injectSaga from '../../utils/injectSaga';
 
-import saga from '../../containers/Users/saga';
-import { authUser } from '../../containers/Users/actions';
+import { authUser, logoutUser } from '../../containers/Users/actions';
+
+import Auth from '../../hoc/auth';
 
 const Bar = styled.div`
 position: fixed;
@@ -73,21 +71,41 @@ class SideBar extends Component {
 
   // show login modal
   showLogin = () => {
+    // show login if not authorized user
     this.setState({ currentModal: React.createElement(LoginPage, {dismiss: this.dismissModal}) })
   }
 
+  // logout user if any
+  handleLogout = () => {
+    this.props.dispatch(logoutUser())
+  }
+
+  // auth user when mounted
   componentDidMount() {
-    this.props.authUser()
+    this.props.dispatch(authUser())
   }
 
   render() {
-    console.log(this.props.auth)
+    let userData = this.props.auth.get('user')
+    let AuthLogout = Auth()
     return <Bar>
       <Heading onClick={this.redirectHome}>Preppy Demo</Heading>
-      {this.props.auth && this.props.auth.get('user') ? this.props.auth.get('user').name: null}
+      {this.props.auth && userData ? userData['name']: null}
       <ListItems>
-        <Item onClick={this.showLogin}>Login</Item>
-        <Item onClick={this.showLogin}>Register</Item>
+        {
+          // not logged in display login and register options
+        !this.props.auth.get('auth') ? 
+        <React.Fragment>
+          <Item onClick={this.showLogin}>Login</Item>
+          <Item onClick={this.showLogin}>Register</Item>
+        </React.Fragment>
+        :null
+
+        }
+        {
+          // logged in display logout
+          this.props.auth.get('auth') ? <Item onClick={this.handleLogout}>Logout</Item>: null
+        }
       </ListItems>
       {this.state.currentModal ? this.state.currentModal: null}
     </Bar>;
@@ -99,12 +117,4 @@ const mapStateToProps = (state) => {
     auth: state.get('auth'),
   }
 }
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    authUser: () => dispatch(authUser()),
-  }
-}
-
-const withConnect = connect(mapStateToProps, mapDispatchToProps)
-export default compose(withConnect)(SideBar);
+export default connect(mapStateToProps, null)(SideBar);

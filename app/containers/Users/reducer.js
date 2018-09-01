@@ -1,10 +1,11 @@
 import {fromJS} from 'immutable';
 import { LOGIN_SUCCESS, LOGIN_ERROR } from './LoginPage/constants';
-import { AUTH_SUCCESS, AUTH_ERROR } from './constants';
+import { AUTH_SUCCESS, AUTH_ERROR, LOGOUT_USER, LOGOUT_SUCCESS, LOGOUT_ERROR } from './constants';
 
 export const initialState = fromJS({
   user: null,
   error: null,
+  auth: false,
 });
 
 export default function userReducer(state = initialState, action) {
@@ -15,10 +16,17 @@ export default function userReducer(state = initialState, action) {
     case LOGIN_ERROR:
       return state.set('error', action.result)
     case AUTH_SUCCESS:
-      return state.set('user', action.result)
+      return state.set('user', action.result).set('auth', true)
     case AUTH_ERROR:
       return state.set('error', action.result)
+    case LOGOUT_USER:
+      return state
+    case LOGOUT_SUCCESS:
+    case LOGOUT_ERROR:
+      localStorage.setItem('authToken', '')
+      return initialState
+
     default:
-      return initialState;
+      return state;
   }
 }

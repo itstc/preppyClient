@@ -24,6 +24,7 @@ import LoginPage from '../Users/LoginPage';
 import LogoutPage from '../Users/LogoutPage';
 import RegisterPage from '../Users/RegisterPage';
 import UserPage from '../Users/UserPage';
+import { authUser } from '../Users/actions';
 
 // For Sidebar and page
 const PageWrapper = styled.div`
@@ -34,22 +35,24 @@ const PageWrapper = styled.div`
   }
 `
 
-export default function App(props) {
-  return (
-    <div>
-      <SideBar {...props}/>
-      <PageWrapper>
-        <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route exact path="/recipes" component={RecipesPage} />
-          <Route exact path="/recipes/:id" component={RecipeItemPage} />
-          <Route exact path="/login" component={LoginPage} />
-          <Route exact path="/logout" component={LogoutPage} />
-          <Route exact path="/register" component={RegisterPage} />
-          <Route exact path="/users/:id" component={UserPage} />
-          <Route component={NotFoundPage} />
-        </Switch>
-      </PageWrapper>
-    </div>
-  );
+export default class App extends Component {
+  render() {
+    return (
+      <div>
+        <SideBar {...this.props}/>
+        <PageWrapper>
+          <Switch>
+            <Route exact path="/" component={HomePage} />
+            <Route exact path="/recipes" component={RecipesPage} />
+            <Route exact path="/recipes/:id" component={RecipeItemPage} />
+            <Route exact path="/login" component={LoginPage} />
+            <Route exact path="/logout" component={LogoutPage} />
+            <Route exact path="/register" component={RegisterPage} />
+            <Route exact path="/users/:id" component={UserPage} />
+            <Route component={NotFoundPage} />
+          </Switch>
+        </PageWrapper>
+      </div>
+    );
+  }
 }

@@ -3,11 +3,11 @@ import request from '../../utils/request';
 
 import {SERVER_URL} from '../config';
 
-import { AUTH_USER } from './constants';
+import { AUTH_USER, LOGOUT_USER, LOGOUT_ERROR, LOGOUT_SUCCESS } from './constants';
 import { LOGIN_USER } from './LoginPage/constants';
 
 import {loginSuccess, loginError} from './LoginPage/actions';
-import {authUser, authSuccess, authError} from './actions';
+import {authUser, authSuccess, authError, logoutSuccess, logoutError} from './actions';
 
 // worker for authentication
 function* getAuthData() {
@@ -16,7 +16,7 @@ function* getAuthData() {
   try {
     // send token to backend
     const result = yield call(request, requestURL, {
-      Method: 'GET',
+      method: 'GET',
       headers: {
         'Authorization': `BEARER ${localStorage.getItem('authToken') || ''}`
       },
@@ -44,9 +44,31 @@ function* getLoginResult(action) {
   } 
 }
 
+function* getLogoutUser() {
+
+  // request url
+  const requestURL = `${SERVER_URL}/api/users/logout`
+
+  try {
+    // fetch logout request
+    yield call(request, requestURL, {
+      method: 'POST',
+      headers: {
+        'Authorization': `BEARER ${localStorage.getItem('authToken') || ''}`
+      },
+    });
+    // successful logout
+    yield put(logoutSuccess())
+  }catch (err) {
+    // unsuccessful logout
+    yield put(logoutError())
+  }
+}
+
 export default function* rootSaga() {
   yield [
     takeLatest(LOGIN_USER, getLoginResult),
+    takeLatest(LOGOUT_USER, getLogoutUser),
     takeLatest(AUTH_USER, getAuthData),
   ];
 }
