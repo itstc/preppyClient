@@ -119,8 +119,8 @@ class LoginPage extends Component {
   }
   
   // set render state to false if user is logged in
-  componentWillReceiveProps() {
-    if(this.props.auth) {
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.auth && nextProps.auth.get('auth')) {
       this.setState({renderState: false})
     }
   }

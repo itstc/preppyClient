@@ -21,10 +21,8 @@ import SideBar from '../../components/Sidebar';
 import RecipesPage from '../Recipes/RecipesPage';
 import RecipeItemPage from '../Recipes/RecipeItemPage';
 import LoginPage from '../Users/LoginPage';
-import LogoutPage from '../Users/LogoutPage';
 import RegisterPage from '../Users/RegisterPage';
 import UserPage from '../Users/UserPage';
-import { authUser } from '../Users/actions';
 
 // For Sidebar and page
 const PageWrapper = styled.div`
@@ -46,7 +44,6 @@ export default class App extends Component {
             <Route exact path="/recipes" component={RecipesPage} />
             <Route exact path="/recipes/:id" component={RecipeItemPage} />
             <Route exact path="/login" component={LoginPage} />
-            <Route exact path="/logout" component={LogoutPage} />
             <Route exact path="/register" component={RegisterPage} />
             <Route exact path="/users/:id" component={UserPage} />
             <Route component={NotFoundPage} />

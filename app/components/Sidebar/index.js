@@ -87,7 +87,6 @@ class SideBar extends Component {
 
   render() {
     let userData = this.props.auth.get('user')
-    let AuthLogout = Auth()
     return <Bar>
       <Heading onClick={this.redirectHome}>Preppy Demo</Heading>
       {this.props.auth && userData ? userData['name']: null}
