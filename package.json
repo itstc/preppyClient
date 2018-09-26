@@ -59,11 +59,6 @@
     ]
   },
   "pre-commit": "lint:staged",
-  "proxy": {
-    "/api": {
-      "target": "http://localhost:8000"
-    }
-  },
   "babel": {
     "plugins": [
       "styled-components"
