@@ -7,6 +7,7 @@ import LoginPage from '../../containers/Users/LoginPage';
 import { authUser, logoutUser } from '../../containers/Users/actions';
 
 import Auth from '../../hoc/auth';
+import RegisterPage from '../../containers/Users/RegisterPage';
 
 const Bar = styled.div`
 position: fixed;
@@ -75,6 +76,12 @@ class SideBar extends Component {
     this.setState({ currentModal: React.createElement(LoginPage, {dismiss: this.dismissModal}) })
   }
 
+    // show register modal
+    showRegister = () => {
+      // show login if not authorized user
+      this.setState({ currentModal: React.createElement(RegisterPage, {dismiss: this.dismissModal}) })
+    }
+
   // logout user if any
   handleLogout = () => {
     this.props.dispatch(logoutUser())
@@ -96,7 +103,7 @@ class SideBar extends Component {
         !this.props.auth.get('auth') ? 
         <React.Fragment>
           <Item onClick={this.showLogin}>Login</Item>
-          <Item onClick={this.showLogin}>Register</Item>
+          <Item onClick={this.showRegister}>Register</Item>
         </React.Fragment>
         :null
 
